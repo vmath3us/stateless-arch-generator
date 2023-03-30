@@ -44,7 +44,7 @@ container_entry(){
     --tty \
     --interactive \
     --detach-keys="" \
-    pod-Arch $current_dir/pod-Arch.sh
+    pod-Arch $current_dir/SA_Generator.sh
 }
 stop_setup(){
 printf "\nparando container...%s\n"
@@ -182,7 +182,7 @@ printf "gerando initrd customizado...\n"
         cd $initrd_build_dir &&
         bsdtar -xf $nocow_dir/initramfs-linux.img &&
         mkdir -p $initrd_build_dir/root/etc/systemd/system/serial-getty@ttyS0.service.d/ &&
-        cp $current_dir/pod-Arch.sh $initrd_build_dir/root/. &&
+        cp $current_dir/SA_Generator.sh $initrd_build_dir/root/. &&
         cp $current_dir/packagelist.pacman $initrd_build_dir/root/. &&
         cp $current_dir/stateless-arch.tar $initrd_build_dir/root/. &&
 cat  > $initrd_build_dir/root/etc/systemd/system/serial-getty@ttyS0.service.d/autologin.conf <<EOF
@@ -190,8 +190,8 @@ cat  > $initrd_build_dir/root/etc/systemd/system/serial-getty@ttyS0.service.d/au
 ExecStart=
 ExecStart=-/sbin/agetty -o '-p -f -- \\u' --autologin root --keep-baud 115200,57600,38400,9600 %I \$TERM
 EOF
-printf './pod-Arch.sh' > $initrd_build_dir/root/.zshrc &&
-sed "s|exec env -i|cp /root/stateless-arch.tar /root/pod-Arch.sh /root/packagelist.pacman /root/.zshrc /new_root/root/.\nrm -rf /new_root/etc/systemd/system/getty@*\ncp -r /root/etc/systemd/* /new_root/etc/systemd/.\nexec env -i|" -i $initrd_build_dir/init &&
+printf './SA_Generator.sh' > $initrd_build_dir/root/.zshrc &&
+sed "s|exec env -i|cp /root/stateless-arch.tar /root/SA_Generator.sh /root/packagelist.pacman /root/.zshrc /new_root/root/.\nrm -rf /new_root/etc/systemd/system/getty@*\ncp -r /root/etc/systemd/* /new_root/etc/systemd/.\nexec env -i|" -i $initrd_build_dir/init &&
         unlink var/run &&
         find . -mindepth 1 -printf '%P\0' | sort -z | bsdtar --uid 0 --gid 0 --nul -cnf - -T - | bsdtar --null -cf - --format=newc @- | zstd -T0f3c > $nocow_dir/pod-Arch-init.img
         return
@@ -523,7 +523,7 @@ EOF
     umount -R /tmp/sysadmin_state/ &&
     cp /etc/shadow /mnt/etc/shadow &&
     tar -xf /root/stateless-arch.tar -C /mnt &&
-    cp /root/pod-Arch.sh /usr/local/sbin/pod-Arch-generator &&
+    cp /root/SA_Generator.sh /usr/local/sbin/pod-Arch-generator &&
     sed "s/^HOOKS=(\(.*\))/HOOKS=(\1 stateless-mode-boot)/" -i /mnt/etc/mkinitcpio.conf &&
     sed "/^#pt_BR./ s/.//" -i /mnt/etc/locale.gen &&
     sed "/^#en_US./ s/.//" -i /mnt/etc/locale.gen &&
