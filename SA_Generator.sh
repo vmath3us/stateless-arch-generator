@@ -30,6 +30,8 @@ provisioning_kvm_exec(){
     chattr +C $nocow_dir    ########################## cow dirs causes kernel-panic on qemu -kernel
 kvm_podman_command="podman create
                     --net host
+                    --privileged
+                    --security-opt label-disable
                     --name pod-Arch
                     --volume $current_dir:$current_dir
                     --volume $pacman_cache:/var/cache/pacman/pkg
