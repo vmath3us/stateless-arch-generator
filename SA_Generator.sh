@@ -31,7 +31,7 @@ provisioning_kvm_exec(){
 kvm_podman_command="podman create
                     --net host
                     --privileged
-                    --security-opt label-disable
+                    --security-opt label=disable
                     --name pod-Arch
                     --volume $current_dir:$current_dir
                     --volume $pacman_cache:/var/cache/pacman/pkg
