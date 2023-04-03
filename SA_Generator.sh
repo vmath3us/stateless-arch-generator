@@ -98,6 +98,8 @@ if ! command -v qemu-img || ! command -v qemu-system-x86_64 || ! command -v sgdi
 }
 disk_create(){
     printf "\ncriando arquivos imagem de suporte\n"
+    mkdir -p $nocow_dir &&  ###### recreate if user delete dirs
+    chattr +C $nocow_dir    ########################## cow dirs causes kernel-panic on qemu -kernel
 exiting_log="create-disk"
 plb_cache="pacmancache"           ### partlabel is gpt flag
 splb_cache="validcache"           ### partlabel is gpt flag
