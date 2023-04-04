@@ -517,7 +517,7 @@ exit_vm_log="pacstrap-save"
 files_on_root(){
 exit_vm_log="populate-new-root" &&
     mount --mkdir $lb/$lb_root /tmp/sysadmin_state -o compress-force=zstd:1,subvol=@sysadmin_state,noatime &&
-    mkdir -p /tmp/sysadmin_state/etc &&
+    mkdir -p /tmp/sysadmin_state/etc/pacman.d &&
 cat >> /tmp/sysadmin_state/etc/fstab << EOF
 $lb/$lb_root    /    btrfs   noatime,compress-force=zstd:1
 
@@ -530,6 +530,7 @@ $lb/$lb_root    /var/log    btrfs   rw,subvol=@log,noatime,compress-force=zstd:1
 $lb/$lb_root    /home    btrfs   rw,subvol=@home,noatime,compress-force=zstd:1
 EOF
     cp /etc/pacman.conf /tmp/sysadmin_state/etc/pacman.conf &&
+    cp /etc/pacman.d/mirrorlist /tmp/sysadmin_state/etc/pacman.d/mirrorlist &&
     umount -R /tmp/sysadmin_state/ &&
     cp /etc/shadow /mnt/etc/shadow &&
     tar -xf /root/stateless-arch.tar -C /mnt &&
