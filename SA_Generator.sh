@@ -362,7 +362,7 @@ exiting_status_print(){
             printf "\na instalação falhou\nrode o script novamente para outra tentativa%s\n"
             ;;
         preserved)
-            printf "\na instalaçã existente foi preservada%s\n"
+            printf "\na instalação existente foi preservada%s\n"
             ;;
         *)
             printf "\nerro desconhecido%s\n"
@@ -419,6 +419,7 @@ mount_reason="entry"
     mount_root &&
     keyring_populate &&
     keyring_update &&
+    reflector_populate &&
     run_pacstrap &&
     snapshot_pure_arch &&
     files_on_root &&
@@ -487,6 +488,11 @@ keyring_update(){
 exit_vm_log="keyring-update" &&
     pacman -Sy archlinux-keyring --noconfirm
     return
+}
+reflector_populate(){
+exit_vm_log="mirrorlist" &&
+reflector --save /etc/pacman.d/mirrorlist --country US,UK --latest 50 --sort rate --protocol https
+return
 }
 run_pacstrap(){
 exit_vm_log="pacstrap" &&
@@ -589,6 +595,9 @@ impossible="não foi possível"
             ;;
         keyring-update)
             printf "\n $impossible atualizar o chaveiro do pacman%s\n"
+            ;;
+        mirrorlist)
+            printf "\n $impossible gerar nova lista de mirrors%s\n"
             ;;
         pacstrap)
             printf "\n $impossible instalar os pacotes requeridos no novo root%s\n"
