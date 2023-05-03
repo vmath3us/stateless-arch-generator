@@ -145,14 +145,16 @@ download_files(){
 ###### this links is static because ArchPXE  https://archlinux.org/releng/netboot/
     printf "baixando arquivos...\n"
 exiting_log="download"
+version_table="https://geo.mirror.pkgbuild.com/iso/latest"
 hash_table="https://geo.mirror.pkgbuild.com/iso/latest/sha256sums.txt"
 iso_link='https://geo.mirror.pkgbuild.com/iso/latest/archlinux-x86_64.iso'
 kernel_link='https://geo.mirror.pkgbuild.com/iso/latest/arch/boot/x86_64/vmlinuz-linux'
 initrd_link='https://geo.mirror.pkgbuild.com/iso/latest/arch/boot/x86_64/initramfs-linux.img'
 ################ ever download hashtable
 if [ -f $nocow_dir/sha256sums.txt ] ; then rm -rf $nocow_dir/sha256sums.txt ; fi &&
+if [ -f $nocow_dir/index.html ] ; then rm -rf $nocow_dir/index.html ; fi &&
     aria2c $hash_table -d $nocow_dir &&
-    for i in $iso_link $kernel_link $initrd_link ; do
+    for i in $iso_link $kernel_link $initrd_link $version_table; do
         aria2c --continue=true --auto-file-renaming=false $i -d $nocow_dir
     done
     return
@@ -201,7 +203,9 @@ sed "s|exec env -i|cp /root/stateless-arch.tar /root/SA_Generator.sh /root/packa
         return
 }
 qemu_run(){
-current_iso=$(date +%Y%m)
+current_iso_year=$(date +%Y)
+current_iso_month=$(grep archlinux $nocow_dir/index.html | cut -d "-" -f2 | head -n1 | cut -d "." -f2)
+current_iso="$current_iso_year$current_iso_month"
 exec_qemu="1"
         qemu_command="qemu-system-x86_64
                       -enable-kvm
