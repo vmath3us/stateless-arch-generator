@@ -212,7 +212,7 @@ exec_qemu="1"
                       -bios /usr/share/ovmf/x64/OVMF.fd
                       -nographic
                       -kernel $nocow_dir/vmlinuz-linux
-                      -append \"archisobasedir=arch archisolabel=$current_iso console=ttyS0 systemd.mask=pacman-init.service\"
+                      -append \"archisobasedir=arch archisolabel=$current_iso console=ttyS0 systemd.mask=pacman-init.service systemd.mask=reflector.service\"
                       -initrd $nocow_dir/pod-Arch-init.img
                       -cdrom $nocow_dir/archlinux-x86_64.iso
                       -drive format=raw,file=$nocow_dir/$img_file
