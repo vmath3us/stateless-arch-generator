@@ -491,7 +491,7 @@ exit_vm_log="keyring-update" &&
 }
 reflector_populate(){
 exit_vm_log="mirrorlist" &&
-reflector --save /etc/pacman.d/mirrorlist --country US,UK --latest 50 --sort rate --protocol https
+reflector --save /etc/pacman.d/mirrorlist --country US,Switzerland --latest 50 --sort rate --protocol https
 return
 }
 run_pacstrap(){
