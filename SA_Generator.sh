@@ -547,7 +547,7 @@ grub-mkconfig -o /boot/grub/grub.cfg &&
 locale-gen &&
 mkinitcpio -P &&
 systemctl enable NetworkManager &&
-systemctl enable gdm
+systemctl enable sddm
 EOF
     chmod 700 /mnt/usr/local/sbin/pod-Arch-chroot
     return
